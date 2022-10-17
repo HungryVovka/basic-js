@@ -5,33 +5,33 @@ const { NotImplementedError } = require('../extensions/index.js');
  * 
  */
 
-const chainMaker = {
-  simplechain: [],
+ const chainMaker = {
+  value: [],
   getLength() {
-    return this.simplechain.length
+    return this.value.length;
   },
-  addLink(value) {
-    this.simplechain.push(`( ${value} )`);
+  addLink( value ) {
+    this.value = [...this.value, `( ${value} )~~`];
     return this;
   },
   removeLink(place) {
-    let arrIndex = [];
-    for (let i = 1; i < this.simplechain.length; i++) { arrIndex.push(i) }
-    if (arrIndex.indexOf(place) == -1) {
-      this.simplechain = [];
-      throw new Error("You can't remove incorrect link!")
-    } else {
-      this.simplechain.splice(place - 1, 1);
-      return this;
+    console.log(place)
+    if(typeof place === "number" && (place ^ 0) === place && place >= 1 && place <= this.getLength()){
+      this.value.splice(place - 1, 1);
+    } else{
+      this.value = [];
+      throw new Error("You can\'t remove incorrect link!");
     }
+    return this;
   },
   reverseChain() {
-    this.simplechain.reverse();
+    this.value.reverse();
     return this;
   },
   finishChain() {
-    let answer = this.chain.join("~~");
-    this.simplechain = [];
+    let ans = this.value.join("")
+    let answer = ans.slice(0, ans.length - 2);
+    this.value = [];
     return answer;
   }
 };
