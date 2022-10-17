@@ -21,61 +21,72 @@ const { NotImplementedError } = require('../extensions/index.js');
  */
 
 class VigenereCipheringMachine {
-  constructor(method = "true") {
-    this.type = method;
+  constructor(state = true) {
+    this.state = state;
   }
+  abc = "abcdefghijklmnopqrstuvwxyz";
+  alphabetArray = this.abc.split(""); 
   encrypt(message, key) {
-    let abc = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
-    if (!message || !key) { throw new Error("Incorrect arguments!") }
-    let keyFit = key;
-    if (keyFit.length !== message.length) {
-      while (keyFit.length < message.length) {
-        keyFit = keyFit + key;
-      }
-      keyFit = keyFit.slice(0, message.length)
+    if(!message || !key) {
+      throw new Error("Incorrect arguments!")
     }
-    let answer = [];
-    let j = 0;
-    for (let i = 0; i < message.length; i++){
-      message = message.toUpperCase();
-      keyFit = keyFit.toUpperCase();
-      if (abc.includes(message[i])) {
-        let key = (abc.indexOf(message[i]) + abc.indexOf(keyFit[j])) % 26;
-        answer.push(abc[key])
-        j = j + 1;
-      } else {
-        answer.push(message[i]);
+    console.log(key)
+    let idMassage = [], idKey = [], specialSymbols = [], idRes, answer;
+    message = message.toLowerCase();
+    key = key.toLowerCase();
+    const messageArray = message.split("");
+    messageArray.forEach((a, b) => {
+      if(this.alphabetArray.indexOf(a) === -1) {
+        specialSymbols.push([a, b])
       }
-    }
-    return this.type ? answer.join("") : answer.reverse().join("");
+      return idMassage.push(this.alphabetArray.indexOf(a))
+    });
+    idMassage = idMassage.filter(e => e !== -1)
+    let newKey = key.repeat(idMassage.length).slice(0, idMassage.length);
+    const keyArray = newKey.split('');
+    keyArray.forEach(element => idKey.push(this.alphabetArray.indexOf(element))); 
+    idRes = idMassage.map((a, b) => a === - 1 ? ' ' : a + idKey[b]);
+    answer = idRes.map(e => e === " " ? " " : this.alphabetArray[e] ? this.alphabetArray[e] : this.alphabetArray[e - this.alphabetArray.length]);
+    specialSymbols.forEach(e => {
+      answer.splice(e[1], 0, e[0])
+    })
+    answer = answer.join("").toUpperCase();
+    return answer;
   }
   
-  decrypt(message, key) {
-    if (!message || !key) { throw new Error("Incorrect arguments!") }
-    let abc = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
-    let keyFit = key;
-    if (keyFit.length !== message.length){
-      while (keyFit.length < message.length){
-        keyFit = keyFit + key;
-      }
-      keyFit = keyFit.slice(0, message.length);
+  decrypt(message, key) { 
+    if(!message || !key) {
+      throw new Error("Incorrect arguments!")
     }
-    let answer = [];
-    let j = 0;
-    for (let i = 0; i < message.length; i++) {
-      message = message.toUpperCase();
-      keyFit = keyFit.toUpperCase();
-      if (abc.includes(message[i])){
-        let key = (abc.indexOf(message[i]) - abc.indexOf(keyFit[j]) + 26) % 26;
-        res.push(abc[key])
-        j = j + 1
-      } else {
-        answer.push(message[i]);
+    let idMassage = [], idKey = [], specialSymbols = [], idRes, answer;
+    message = message.toLowerCase();
+    key = key.toLowerCase();
+    const messageArray = message.split("");
+    messageArray.forEach((a, b) => {
+      if(this.alphabetArray.indexOf(a) === -1) {
+        specialSymbols.push([a, b])
       }
+      return idMassage.push(this.alphabetArray.indexOf(a))
+    });
+    idMassage = idMassage.filter(element => element !== -1)
+    let newKey = key.repeat(idMassage.length).slice(0, idMassage.length);
+    const keyArray = newKey.split('');
+    keyArray.forEach(element => idKey.push(this.alphabetArray.indexOf(element))); 
+    const reverseIdKey = idKey.map(e => String(e)).reverse().map(e => +e)
+    if(this.state) {
+      idRes = idMassage.map((a, b) => a === - 1 ? " " : a > idKey[b] ? a - idKey[b] : a - idKey[b] + this.alphabetArray.length)
+    } else {
+      idRes = idMassage.map((a, b) => a === - 1 ? " " : a > reverseIdKey[b] ? a - reverseIdKey[b] : a - reverseIdKey[b] + this.alphabetArray.length)
     }
-    return this.type ? answer.join("") : answer.reverse().join("");
+    answer = idRes.map(e => e === " " ? " " : this.alphabetArray[e] ? this.alphabetArray[e] : this.alphabetArray[e - this.alphabetArray.length]);
+    specialSymbols.forEach(element => {
+      answer.splice(element[1], 0, element[0])
+    })
+    answer = answer.join("").toUpperCase();
+    return answer;
   }
 }
+
 
 module.exports = {
   VigenereCipheringMachine
