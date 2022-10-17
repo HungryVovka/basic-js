@@ -25,48 +25,48 @@ const { NotImplementedError } = require('../extensions/index.js');
  */
 
  function minesweeper(mx) {
-  var answer = [];
-  for(let i = 0; i < mx.length; i++) {
-    for( let j = 0; j < mx[i].length; j++) {
+  let answer = [];
+  for(let i = 0; i < mx.length; i++){
+    for(let j = 0; j < mx[i].length; j++){
       let arr = [];
       if(mx[i - 1]) {
-        if (mx[i - 1][j] === true) {
+        if (mx[i - 1][j] === true){
           arr.push(mx[i - 1][j]);
         }
-        if (mx[i - 1][j - 1] === true) {
+        if (mx[i - 1][j - 1] === true){
           arr.push(mx[i - 1][j - 1]);
         }
-        if (mx[i - 1][j + 1] === true) {
+        if (mx[i - 1][j + 1] === true){
           arr.push(mx[i - 1][j + 1]);
         }
       }
       if(mx[i + 1]) {
-        if (mx[i + 1][j] === true) {
+        if (mx[i + 1][j] === true){
           arr.push(mx[i + 1][j]);
         }
-        if (mx[i + 1][j - 1] === true) {
+        if (mx[i + 1][j - 1] === true){
           arr.push(mx[i + 1][j - 1]);
         }
-        if (matrix[i + 1][j + 1] === true) {
+        if (mx[i + 1][j + 1] === true){
           arr.push(mx[i + 1][j + 1]);
         }
       }
-      if(mx[i][j - 1]) {
-        if(mx[i][j - 1] === true) {
+      if(mx[i][j - 1]){
+        if(mx[i][j - 1] === true){
           arr.push(mx[i][j - 1]);
         }
       }
-      if(mx[i][j + 1]) {
-        if(mx[i][j + 1] === true) {
+      if(mx[i][j + 1]){
+        if(mx[i][j + 1] === true){
           arr.push(mx[i][j + 1]);
         }
       }
-      let k = arr.length;
-      if(answer[i]){
-        answer[i][j] = k;
+      let a = arr.length;
+      if(answer[i]){;
+        answer[i][j] = a;
       } else {
         answer[i] = [];
-        answer[i][j] = k;
+        answer[i][j] = a;
       }
     }
   }
